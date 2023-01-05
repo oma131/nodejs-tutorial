@@ -1,8 +1,22 @@
-const http = require('http')
+const express = require('express')
+const app = express()
 
-const server = http.createServer((req, res) => {
-    console.log("User is connected");
-    res.end('Home Page')
+const logger = (req, res, next) => {
+    const method = req.method
+    const url = req.url
+    const time = new Date().getFullYear()
+    console.log(method, url, time);
+    next()
+}
+
+app.get('/', logger, (req, res) => {
+    res.send('Home')
 })
 
-server.listen(5000)
+app.get('/about', logger, (req, res) => {
+    res.send('About')
+})
+
+app.listen(5000, () => {
+    console.log('App is listening at port 5000...');
+})
